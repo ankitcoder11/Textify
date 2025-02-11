@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import InputLoginComponent, { InputPasswordComponent } from '../utiles/InputLoginComponent';
-import Button from '../utiles/Button';
+import InputLoginComponent, { InputPasswordComponent } from '../../utiles/InputLoginComponent';
+import Button from '../../utiles/Button';
 import toast from 'react-hot-toast';
 import { CiLock, CiMail, CiMobile1, CiUser } from 'react-icons/ci';
 import { FiMessageSquare } from 'react-icons/fi';
+import { Link, useNavigate } from 'react-router-dom';
+import { registerUsers } from '../../api';
 
 const formikSignupSchema = Yup.object().shape({
     fullName: Yup.string()
@@ -32,6 +34,7 @@ const formikSignupSchema = Yup.object().shape({
 });
 
 const Signup = () => {
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
@@ -46,7 +49,7 @@ const Signup = () => {
             });
             toast.success(response?.message);
             formikSignup.resetForm();
-            navigate(`/login/verify-otp/${response?.data._id}`);
+            navigate(`/user/verify-otp/${response?.data._id}`);
         } catch (error) {
             toast.error(error.message || 'An unexpected error occurred. Please try again.');
             console.error('Error:', error.message);
@@ -68,8 +71,7 @@ const Signup = () => {
     });
 
     return (
-        <form
-            className={`flex flex-col items-center justify-center gap-[20px] w-[80%] mx-auto`}
+        <form className='flex flex-col items-center justify-center gap-[20px] w-[80%] mx-auto'
             onSubmit={formikSignup.handleSubmit}>
             <div className='flex flex-col items-center justify-center gap-[3px] '>
                 <div className='p-[4px] rounded bg-buttonColour text-bgColour'><FiMessageSquare /></div>
@@ -115,7 +117,10 @@ const Signup = () => {
                     touched={formikSignup?.touched?.confirmPassword} />
 
             </div>
-            <Button text="Sign Up" onClick={formikSignup.handleSubmit} isLoading={loading} className='w-full' />
+            <div className='flex flex-col w-full items-center gap-[3px]'>
+                <Button text="Create Account" onClick={formikSignup.handleSubmit} isLoading={loading} className='w-full' />
+                <p>Already have an account? <Link to='/user/login' className='underline cursor-pointer'>Sign in</Link></p>
+            </div>
         </form>
     )
 }

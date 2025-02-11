@@ -1,12 +1,12 @@
 import React from 'react'
 import { VscEye, VscEyeClosed } from 'react-icons/vsc'
 
-const InputLoginComponent = ({ placeholder, icon, name, errors, touched, changeHandler, value }) => {
+const InputLoginComponent = ({ placeholder, icon, name, errors, touched, changeHandler, value, readOnly }) => {
     return (
         <>
             <div className='p-[10px] border rounded border-textColour w-full flex items-center gap-[10px] relative'>
                 <div>{icon}</div>
-                <input type='text' placeholder={placeholder} name={name}
+                <input type='text' placeholder={placeholder} name={name} readOnly={readOnly}
                     value={value} onChange={changeHandler}
                     className='bg-bgColour outline-none w-full ' />
                 {errors && touched && <p className='absolute text-[10px] bottom-[-14px] text-red-500'> {errors}</p>}
